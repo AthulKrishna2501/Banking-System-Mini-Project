@@ -7,6 +7,7 @@ type Account struct {
 	AccountNumber string `gorm:"uniqueIndex"`
 	UserID        uint
 	Balance       float64 `gorm:"not null"`
+	Version       uint    `gorm:"default:1"`
 }
 
 type Transations struct {
