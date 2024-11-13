@@ -9,6 +9,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+var MaxAmount = 10000
+
 func GetAccount(c *gin.Context) {
 	var account models.Account
 	var input struct {
@@ -39,4 +41,29 @@ func GetAccount(c *gin.Context) {
 	})
 }
 
+func CreateAccount(c *gin.Context) {
+	var account models.Account
+
+	if err := c.ShouldBindJSON(&account); err != nil {
+		log.WithFields(log.Fields{
+			"error": err.Error(),
+		}).Error("error binding JSON")
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	account.Balance = 0
+
+	if err := db.DB.Create(&account).Error; err != nil {
+		log.WithFields(log.Fields{
+			"error": err.Error(),
+		}).Error("error creating account")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Account created succesfully",
+		"Account": account,
+	})
+}
 
