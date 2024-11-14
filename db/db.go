@@ -22,7 +22,7 @@ func InitDatabase() {
 		log.Fatal("Error loading database", err)
 		return
 	}
-	MigrateErr := DB.AutoMigrate(&models.Account{}, &models.Transations{})
+	MigrateErr := DB.AutoMigrate(&models.Account{}, &models.Transactions{})
 	if MigrateErr != nil {
 		log.Fatalf("Migration failed: %v", err)
 	}
